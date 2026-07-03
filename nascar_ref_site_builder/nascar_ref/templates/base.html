@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ title }} · {{ site_name }}</title>
+<link rel="stylesheet" href="{{ base }}static/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="{{ base }}index.html">{{ site_name }}<small>Simulated NASCAR Racing Reference</small></a>
+    <nav class="mainnav">
+      <a href="{{ base }}index.html">Home</a>
+      <a href="{{ base }}seasons/cup/index.html">Cup</a>
+      <a href="{{ base }}seasons/xfinity/index.html">Xfinity</a>
+      <a href="{{ base }}seasons/truck/index.html">Truck</a>
+      <a href="{{ base }}allstar/index.html">All-Star</a>
+      <div class="nav-group">
+        <a href="{{ base }}drivers/index.html">Drivers</a>
+        <div class="dropdown">
+          <a href="{{ base }}drivers/index.html">Browse</a>
+          <a href="{{ base }}drivers/stats.html">Stats</a>
+          <a href="{{ base }}drivers/compare.html">Compare</a>
+        </div>
+      </div>
+      <div class="nav-group">
+        <a href="{{ base }}teams/index.html">Teams</a>
+        <div class="dropdown">
+          <a href="{{ base }}teams/index.html">Browse</a>
+          <a href="{{ base }}teams/stats.html">Stats</a>
+        </div>
+      </div>
+      <a href="{{ base }}tracks/index.html">Tracks</a>
+      <a href="{{ base }}records/index.html">Records</a>
+      <button id="dark-toggle" title="Toggle dark mode"><span class="label">Dark</span></button>
+    </nav>
+    <div class="search-box">
+      <input type="text" class="search-input" id="search-input" placeholder="Search drivers, teams, tracks&hellip;" autocomplete="off">
+      <div class="search-results" id="search-results"></div>
+    </div>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    {{ content }}
+  </div>
+</main>
+<footer>Generated from local race archive &middot; {{ site_name }}</footer>
+<button id="back-to-top" aria-label="Back to top"></button>
+<script src="{{ base }}static/sort.js"></script>
+<script src="{{ base }}static/search-data.js"></script>
+<script src="{{ base }}static/search.js"></script>
+<script>
+(function(){
+  var btn = document.getElementById('back-to-top');
+  if (btn) {
+    window.addEventListener('scroll', function(){
+      btn.classList.toggle('visible', window.scrollY > 300);
+    });
+    btn.addEventListener('click', function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+  }
+  var dt = document.getElementById('dark-toggle');
+  if (dt) {
+    var html = document.documentElement;
+    var saved = localStorage.getItem('theme');
+    if (saved === 'dark') html.setAttribute('data-theme', 'dark');
+    dt.addEventListener('click', function(){
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>

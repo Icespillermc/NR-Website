@@ -1,0 +1,16 @@
+# Generated site output
+nascar_ref_site_builder/nascar_ref/site/
+nascar_ref_site_builder/site/
+nascar_ref_preview_site/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
