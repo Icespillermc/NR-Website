@@ -1,0 +1,7 @@
+cd C:\Users\eelbo\Desktop\Ethan\NR Website\nascar_ref_site_builder\nascar_ref
+
+
+
+python build_site.py --results "C:\Users\eelbo\Desktop\Ethan\NR Website\results" --workbook "C:\Users\eelbo\Desktop\Ethan\NR Website\NASCAR SIM.xlsx" --out ./site
+
+

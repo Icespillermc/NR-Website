@@ -1978,6 +1978,7 @@ class SiteBuilder:
         content = f'''
         <div class="breadcrumb"><a href="../../index.html">Home</a> / <a href="../../seasons/{series}/index.html">{SERIES_LABELS[series]}</a> / {year} Standings</div>
         <h1 class="page-title">{year} {SERIES_LABELS[series]} Standings</h1>
+        <p class="subtitle"><a href="../../seasons/{series}/{year}/">View {year} schedule &rarr;</a></p>
         {note}
         <div class="panel"><h2>Driver Points</h2><div class="body">{tbl}</div></div>
         {team_tbl}
