@@ -2220,6 +2220,7 @@ class SiteBuilder:
             if t:
                 drv_race_counts[(a['year'], a['series'], t)] += 1
         team_history_rows = []
+        team_history_row_classes = []
         for year in sorted(self.seasons.keys(), reverse=True):
             season = self.seasons[year]
             for series, roster in season.get('roster', {}).items():
@@ -2238,10 +2239,13 @@ class SiteBuilder:
                             age_str = f' (age {age})' if age else ''
                             pos = self._season_finish(name, series, year)
                             pos_str = f'<b>{pos}</b>' if pos else '-'
-                            team_history_rows.append([str(year) + age_str, badge(series), esc(r['car']), drv_display, str(cnt), pos_str])
+                            is_champ = self._champion_for(series, year) == name
+                            year_cell = f'<a href="../seasons/{series}/{year}/">{year}</a>{age_str}'
+                            team_history_rows.append([year_cell, badge(series), esc(r['car']), drv_display, str(cnt), pos_str])
+                            team_history_row_classes.append('win' if is_champ else '')
         team_history_tbl = ''
         if team_history_rows:
-            team_history_tbl = f'<div class="panel" id="driver-team-history"><h2>Team History</h2><div class="body">{table_html(["Year", "Series", "#", "Team", "Races", "Fin"], team_history_rows, aligns={0: "num", 2: "num", 4: "num", 5: "num"})}</div></div>'
+            team_history_tbl = f'<div class="panel" id="driver-team-history"><h2>Team History</h2><div class="body">{table_html(["Year", "Series", "#", "Team", "Races", "Fin"], team_history_rows, row_classes=team_history_row_classes, aligns={0: "num", 2: "num", 4: "num", 5: "num"})}</div></div>'
 
         def _series_key(s):
             try:
@@ -2333,6 +2337,15 @@ class SiteBuilder:
         jump_links.append('<a href="#race-log-panel">Race Log</a>')
         jump = f'<div class="jump-bar">{" ".join(jump_links)}</div>'
 
+        champ_tags = ''
+        champ_list = []
+        for s in SERIES_ORDER:
+            for y in sorted(self.years_by_series.get(s, [])):
+                if self._champion_for(s, y) == name:
+                    champ_list.append(f'<a href="../standings/{s}/{y}.html" class="champ-tag {s}">{y} {SERIES_LABELS[s]} Champion</a>')
+        if champ_list:
+            champ_tags = f'<div class="champ-strip">{"".join(champ_list)}</div>'
+
         title_row = f'<div class="driver-title-row">{photo_html}<div><h1 class="page-title" style="margin-top:0">{esc(name)}</h1><p class="subtitle">{("Teams: " + team_links) if team_links else ""}</p>{birth_info}</div></div>'
 
         content = f'''
@@ -2340,6 +2353,7 @@ class SiteBuilder:
         {title_row}
         {jump}
         {stat_boxes}
+        {champ_tags}
         {standings_chart_html}
         <div id="driver-stats">{career_panel}</div>
         {team_history_tbl}
@@ -2458,6 +2472,7 @@ class SiteBuilder:
                     if clean_team_name(r['team']) == name:
                         history[year].append((series, r['car'], r['driver']))
         rows = []
+        row_classes = []
         for year in sorted(history.keys(), reverse=True):
             for series, car, driver in sorted(history[year], key=lambda x: SERIES_ORDER.index(x[0]) if x[0] in SERIES_ORDER else 99):
                 for indiv in split_driver_names(driver):
@@ -2470,8 +2485,11 @@ class SiteBuilder:
                     cnt = team_race_counts.get((year, series, indiv), 0)
                     pos = self._season_finish(indiv, series, year)
                     pos_str = f'<b>{pos}</b>' if pos else '-'
-                    rows.append([str(year), badge(series), esc(car), drv_display, str(cnt), pos_str])
-        roster_tbl = table_html(['Year', 'Series', '#', 'Driver', 'Races', 'Fin'], rows, aligns={0: 'num', 2: 'num', 4: 'num', 5: 'num'})
+                    is_champ = self._champion_for(series, year) == indiv
+                    year_cell = f'<a href="../seasons/{series}/{year}/">{year}</a>'
+                    rows.append([year_cell, badge(series), esc(car), drv_display, str(cnt), pos_str])
+                    row_classes.append('win' if is_champ else '')
+        roster_tbl = table_html(['Year', 'Series', '#', 'Driver', 'Races', 'Fin'], rows, row_classes=row_classes, aligns={0: 'num', 2: 'num', 4: 'num', 5: 'num'})
 
         # ---- team stats (points races only) ----
         def _filter_points(apps):

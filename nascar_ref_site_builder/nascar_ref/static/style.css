@@ -225,6 +225,10 @@ a.plain:hover { text-decoration: underline; color: inherit; }
 .badge.allstar { background: var(--allstar); }
 .badge.overall { background: #555; }
 
+.champ-strip { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 14px 14px; }
+.champ-tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 4px; background: var(--win-row-bg); color: var(--ink); text-decoration: none; border: 1px solid #d4a84b; }
+.champ-tag:hover { border-color: var(--accent); text-decoration: none; }
+
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
 .card {
   background: var(--panel);
